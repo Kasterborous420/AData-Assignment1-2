@@ -14,6 +14,8 @@ using std::endl;
 
 using std::string;
 
+using std::stoi;
+
 class CFraction
 {
 private:

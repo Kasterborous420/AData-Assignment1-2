@@ -127,9 +127,9 @@ ostream & operator<< (ostream & os, CFraction &f)
 
 istream & operator>> (istream &is, CFraction &f)
 {
-	char dash, slash;
+	char dash = '-', slash = '/';
 	int wholenumber = 0;
-
+	
 	is >> wholenumber >> dash >> f.numerator >> slash >> f.denominator;
 
 	//Convert wholenumber to numerator
@@ -176,9 +176,14 @@ CFraction CFraction::simplifyResult(CFraction other)
 {
 	int hcf = getHCF(other);
 
-	other.numerator /= hcf;
-	other.denominator /= hcf;
-
+	if (other.numerator != 0 && hcf != 0)
+	{
+		other.numerator /= hcf;
+	}
+	if (other.denominator != 0 && hcf != 0)
+	{
+		other.denominator /= hcf;
+	}
 	return other;
 }
 
