@@ -127,14 +127,67 @@ ostream & operator<< (ostream & os, CFraction &f)
 
 istream & operator>> (istream &is, CFraction &f)
 {
-	char dash = '-', slash = '/';
+	string input;
+
+	string w, n, d;
+
 	int wholenumber = 0;
-	
-	is >> wholenumber >> dash >> f.numerator >> slash >> f.denominator;
+	bool isFraction = false;
 
-	//Convert wholenumber to numerator
-	f.numerator += wholenumber * f.denominator;
+	/*std::getline(is, input, '-');
 
+	wholenumber = stoi(input, nullptr, 10);
+
+	std::getline(is, input, '/');
+
+	f.numerator = stoi(input, nullptr, 10);
+
+	std::getline(is, input);
+
+	f.denominator = stoi(input, nullptr, 10);*/
+
+
+	is >> input;
+
+	for (int i = 0; i < input.size(); i++)
+	{
+		if (input[i] == '-' || input[i] == '/')
+		{
+			isFraction = true;
+		}
+	}
+	if (isFraction)
+	{
+		for (int i = 0; i < input.size(); i++)
+		{
+			//For Proper Fractions
+			if (input[i] == '-')
+			{
+				w = input.substr(0, i);
+				input = input.erase(0, i + 1);
+				i = 0;
+				wholenumber = stoi(w, nullptr, 10);
+			}
+			if (input[i] == '/')
+			{
+				n = input.substr(0, i);
+				input = input.erase(0, i + 1);
+				i = 0;
+				f.numerator = stoi(n, nullptr, 10);
+
+				f.denominator = stoi(input, nullptr, 10);
+				
+				break;
+			}
+		}
+		f.numerator += wholenumber * f.denominator;
+	}
+	else if (!isFraction)
+	{
+		wholenumber = stoi(input, nullptr, 10);
+		f.denominator = 1;
+		f.numerator = wholenumber;
+	}
 	return is;
 }
 
@@ -260,21 +313,44 @@ int CFraction::getHCF(CFraction fraction)
 
 void CFraction::Display(bool isProper)
 {
-	string whole, num, denom;
+	int whole, num, denom;
 
+	whole = (this->numerator / this->denominator);
+	num = (this->numerator % this->denominator);
+	denom = (this->denominator);
+	
 	if (isProper)
 	{
-		whole = std::to_string(this->numerator / this->denominator);
-		num = std::to_string(this->numerator % this->denominator);
-		denom = std::to_string(this->denominator);
 
-		cout << whole << "-" << num << "/" << denom << " " << "(Proper)" << endl;
+		if (this->numerator == 0)
+		{
+			cout << "0 (Proper)" << endl;
+		}
+		else if (this->numerator % this->denominator == 0)
+		{
+			cout << whole << " (Proper)" << endl;
+		}
+		else
+		{
+			cout << whole << "-" << num << "/" << denom << " " << "(Proper)" << endl;
+		}
 	}
 	else
 	{
-		num = std::to_string(this->numerator);
-		denom = std::to_string(this->denominator);
+		num = (this->numerator);
+		denom = (this->denominator);
 
-		cout << num << "/" << denom << " " << "(Improper)" << endl;
+		if (this->numerator == 0)
+		{
+			cout << "0 (Proper)" << endl;
+		}
+		else if (this->numerator % this->denominator)
+		{
+			cout << whole << " (Proper)" << endl;
+		}
+		else
+		{
+			cout << num << "/" << denom << " " << "(Improper)" << endl;
+		}
 	}
 }
