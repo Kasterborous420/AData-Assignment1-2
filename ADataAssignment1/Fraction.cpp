@@ -211,7 +211,16 @@ istream & operator>> (istream &is, CFraction &f)
 				i = 0;
 				if (!n.empty())
 				{
-					f.numerator = stoi(n, nullptr, 10);
+					if (stoi(n, nullptr, 10) > INT_MAX || stoi(n, nullptr, 10) < INT_MIN)
+					{
+						cout << " Input out of Bounds" << endl;
+						cout << endl;
+						cout << " Please Re-Enter Numerator" << endl;
+						cout << endl;
+						std::cin >> f.numerator;
+					}
+					else
+						f.numerator = stoi(n, nullptr, 10);
 				}
 				else
 				{
@@ -219,7 +228,16 @@ istream & operator>> (istream &is, CFraction &f)
 				}
 				if (!input.empty())
 				{
-					f.denominator = stoi(input, nullptr, 10);
+					if (stoi(input, nullptr, 10) > INT_MAX || stoi(input, nullptr, 10) < INT_MIN)
+					{
+						cout << " Input out of Bounds" << endl;
+						cout << endl;
+						cout << " Please Re-Enter Denominator" << endl;
+						cout << endl;
+						std::cin >> f.denominator;
+					}
+					else
+						f.denominator = stoi(input, nullptr, 10);
 				}
 				else
 				{
@@ -236,11 +254,10 @@ istream & operator>> (istream &is, CFraction &f)
 				{
 					if (x == 0)
 					{
-						int d;
+
 						cout << "Denominator CANNOT be ZERO!" << endl;
 						cout << "Input denominator: ";
-						std::cin >> d;
-						f.denominator = d;
+						std::cin >> f.denominator;
 					}
 				}
 				
@@ -259,6 +276,16 @@ istream & operator>> (istream &is, CFraction &f)
 		{
 			cout << endl;
 			cout << " Invalid argument: " << ia.what() << endl;
+			cout << endl;
+			cout << " Application will close due to user disobedience" << endl;
+			cout << endl;
+			system("pause");
+			exit(0);
+		}
+		catch (std::out_of_range &oor)
+		{
+			cout << endl;
+			cout << " " << oor.what() << endl;
 			cout << endl;
 			cout << " Application will close due to user disobedience" << endl;
 			cout << endl;
