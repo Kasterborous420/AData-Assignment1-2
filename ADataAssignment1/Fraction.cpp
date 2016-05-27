@@ -1,6 +1,11 @@
 #include "Fraction.h"
-
-
+#include <stdexcept>
+//Function Name: CFraction constructor
+//Author: Wayne 140189H
+//returns void
+//params: 
+//
+//Function Purpose: Default Contructor
 CFraction::CFraction()
 {
 	//Default Values
@@ -8,6 +13,12 @@ CFraction::CFraction()
 	this->denominator = 0;
 }
 
+//Function Name: Overloaded Constructor
+//Author: Wayne 140189H
+//returns void
+//params: 
+//
+//Function Purpose: Overloads the constructor
 CFraction::CFraction(int numerator, int denominator)
 {
 
@@ -15,6 +26,12 @@ CFraction::CFraction(int numerator, int denominator)
 	this->denominator = denominator;
 }
 
+//Function Name: xXx_D3STR0Y3R_xXx
+//Author: Wayne 140189H
+//returns void
+//params: 
+//
+//Function Purpose: xXx_D3STR0Y3R_xXx
 CFraction::~CFraction()
 {
 }
@@ -22,8 +39,12 @@ CFraction::~CFraction()
 
 //================Operator Overloads===============//
 
-//Addition 
+//Function Name: Overloaded + operator
+//Author: Wayne 140189H
 //returns CFraction
+//params: CFraction otherFraction
+//
+//Function Purpose: to make operator + work with the CFraction Class
 CFraction CFraction::operator+(CFraction other)
 {
 	CFraction output;
@@ -47,13 +68,17 @@ CFraction CFraction::operator+(CFraction other)
 	output.denominator = lcm;
 
 	//Simplify output
-	output = simplifyResult(output);
+	output.simplifyResult();
 
 	return output;
 }
 
-//Subtraction
+//Function Name: Overloaded - operator
+//Author: Wayne 140189H
 //returns CFraction
+//params: CFraction otherFraction
+//
+//Function Purpose: to make operator - work with the CFraction Class
 CFraction CFraction::operator-(CFraction other)
 {
 	CFraction output;
@@ -77,13 +102,17 @@ CFraction CFraction::operator-(CFraction other)
 	output.denominator = lcm;
 
 	//Simplify output
-	output = simplifyResult(output);
+	output.simplifyResult();
 
 	return output;
 }
 
-//Multiplication
+//Function Name: Overloaded * operator
+//Author: Wayne 140189H
 //returns CFraction
+//params: CFraction otherFraction
+//
+//Function Purpose: to make operator * work with the CFraction Class
 CFraction CFraction::operator*(CFraction other)
 {
 	CFraction output;
@@ -94,8 +123,12 @@ CFraction CFraction::operator*(CFraction other)
 	return output;
 }
 
-//Division
+//Function Name: Overloaded / operator
+//Author: Wayne 140189H
 //returns CFraction
+//params: CFraction otherFraction
+//
+//Function Purpose: to make operator / work with the CFraction Class
 CFraction CFraction::operator/(CFraction other)
 {
 	CFraction output;
@@ -113,11 +146,17 @@ CFraction CFraction::operator/(CFraction other)
 	output.denominator = temp2.denominator * temp1.denominator;
 
 
-	output = simplifyResult(output);
+	output.simplifyResult();
 
 	return output;
 }
 
+//Function Name: Overloaded << operator
+//Author: Wayne 140189H
+//returns ostream
+//params: CFraction otherFraction, CFraction &f
+//
+//Function Purpose: Use CFraction in the output stream
 ostream & operator<< (ostream & os, CFraction &f)
 {
 	os << f.numerator << "/" << f.denominator;
@@ -125,6 +164,12 @@ ostream & operator<< (ostream & os, CFraction &f)
 	return os;
 }
 
+//Function Name: Overloaded >> operator
+//Author: Wayne 140189H
+//returns istream
+//params: CFraction otherFraction, CFraction &f
+//
+//Function Purpose: Parse the Input Stream to CFraction
 istream & operator>> (istream &is, CFraction &f)
 {
 	string input;
@@ -137,7 +182,7 @@ istream & operator>> (istream &is, CFraction &f)
 
 	is >> input;
 
-	for (int i = 0; i < input.size(); i++)
+	for (unsigned int i = 0; i < input.size(); i++)
 	{
 		if (input[i] == '-' || input[i] == '/')
 		{
@@ -146,7 +191,7 @@ istream & operator>> (istream &is, CFraction &f)
 	}
 	if (isFraction)
 	{
-		for (int i = 0; i < input.size(); i++)
+		for (unsigned int i = 0; i < input.size(); i++)
 		{
 			//For Proper Fractions
 			if (input[i] == '-')
@@ -154,16 +199,35 @@ istream & operator>> (istream &is, CFraction &f)
 				w = input.substr(0, i);
 				input = input.erase(0, i + 1);
 				i = 0;
-				wholenumber = stoi(w, nullptr, 10);
+				if (!w.empty())
+				{
+					wholenumber = stoi(w, nullptr, 10);
+				}
 			}
 			if (input[i] == '/')
 			{
 				n = input.substr(0, i);
 				input = input.erase(0, i + 1);
 				i = 0;
-				f.numerator = stoi(n, nullptr, 10);
+				if (!n.empty())
+				{
+					f.numerator = stoi(n, nullptr, 10);
+				}
+				else
+				{
+					f.numerator = 0;
+				}
+				if (!input.empty())
+				{
+					f.denominator = stoi(input, nullptr, 10);
+				}
+				else
+				{
+					f.denominator = 0;
+				}
+				
 
-				f.denominator = stoi(input, nullptr, 10);
+				//Check for '0' Denominator
 				try
 				{
 					if (f.denominator == 0) throw 0;
@@ -187,7 +251,20 @@ istream & operator>> (istream &is, CFraction &f)
 	}
 	else if (!isFraction)
 	{
-		wholenumber = stoi(input, nullptr, 10);
+		try{
+
+			wholenumber = stoi(input, nullptr, 10);
+		}
+		catch (std::invalid_argument &ia)
+		{
+			cout << endl;
+			cout << " Invalid argument: " << ia.what() << endl;
+			cout << endl;
+			cout << " Application will close due to user disobedience" << endl;
+			cout << endl;
+			system("pause");
+			exit(0);
+		}
 		f.denominator = 1;
 		f.numerator = wholenumber;
 	}
@@ -197,75 +274,59 @@ istream & operator>> (istream &is, CFraction &f)
 
 //================Functions==============//
 
-////Converting to Improper Fraction
-//CFraction CFraction::convertToImproper(CFraction other)
-//{
-//	CFraction output;
-//	
-//	output.wholenumber = 0;
-//	output.numerator = (other.wholenumber * other.denominator) + other.numerator;
-//	output.denominator = other.denominator;
+//Function Name: simplifyResult
+//Author: Wayne 140189H
+//returns void
+//params: 
 //
-//	return output;
-//}
-//
-////Converting to Proper Fraction
-//CFraction CFraction::convertToProper(CFraction other)
-//{
-//	CFraction output;
-//
-//	int i = 0;
-//	
-//	i = other.numerator / other.denominator;
-//
-//	output.wholenumber = other.denominator * i;
-//
-//	output.numerator = other.numerator - output.wholenumber;
-//
-//	output.denominator = other.denominator;
-//
-//	return output;
-//}
-
-//Simplification
-CFraction CFraction::simplifyResult(CFraction other)
+//Function Purpose: Simplifies Fraction
+void CFraction::simplifyResult()
 {
-	int hcf = getHCF(other);
+	int hcf = getHCF(*this);
 
-	if (other.numerator != 0 && hcf != 0)
+	if (this->numerator != 0 && hcf != 0)
 	{
-		other.numerator /= hcf;
+		this->numerator /= hcf;
 	}
-	if (other.denominator != 0 && hcf != 0)
+	if (this->denominator != 0 && hcf != 0)
 	{
-		other.denominator /= hcf;
+		this->denominator /= hcf;
 	}
-	return other;
 }
 
-//Comparison
-void CFraction::compare(CFraction f1, CFraction f2)
+//Function Name: compare
+//Author: Wayne 140189H
+//returns void
+//params: CFraction otherFraction
+//
+//Function Purpose: Compares this and otherFraction and outputs which Fraction is bigger than the other one
+void CFraction::compare(CFraction other)
 {
 	float c1, c2;
 
-	c1 = (f1.numerator / f1.denominator);
-	c2 = (f2.numerator / f2.denominator);
+	c1 = ((float)this->numerator / (float)this->denominator);
+	c2 = ((float)other.numerator / (float)other.denominator);
 
 	if (c1 > c2)
 	{
-		cout << f1 << " is greater than " << f2 << endl;
+		cout << *this << " is greater than " << other << endl;
 	}
 	else if (c1 < c2)
 	{
-		cout << f1 << " is lesser than " << f2 << endl;
+		cout << *this << " is lesser than " << other << endl;
 	}
 	else
 	{
-		cout << "The Fractions: " << f1 << " and " << f2 << " are Equal" << endl;
+		cout << "The Fractions: " << *this << " and " << other << " are Equal" << endl;
 	}
 }
 
-//Get LCM
+//Function Name: getLCM
+//Author: Wayne 140189H
+//returns int
+//params: CFraction otherFraction
+//
+//Function Purpose: gets the LCM from this and otherFraction
 int CFraction::getLCM(CFraction other)
 {
 	int lcm = 0;
@@ -288,7 +349,12 @@ int CFraction::getLCM(CFraction other)
 	return lcm;
 }
 
-//Get HCF
+//Function Name: getHCF
+//Author: Wayne 140189H
+//returns int
+//params: CFraction otherFraction
+//
+//Function Purpose: gets HCf between this and otherFraction
 int CFraction::getHCF(CFraction fraction)
 {
 	int hcf = 0;
@@ -314,6 +380,13 @@ int CFraction::getHCF(CFraction fraction)
 	return hcf;
 }
 
+//Function Name: Display
+//Author: Wayne 140189H
+//returns void
+//params: bool isProper
+//
+//Function Purpose: Displays Fractions in Proper or Improper mode
+//Fun fact: This Function exists purely because overloading << cannot take in a boolean
 void CFraction::Display(bool isProper)
 {
 	int whole, num, denom;
@@ -345,11 +418,11 @@ void CFraction::Display(bool isProper)
 
 		if (this->numerator == 0)
 		{
-			cout << "0 (Proper)" << endl;
+			cout << "0 (Improper)" << endl;
 		}
-		else if (this->numerator % this->denominator)
+		else if (this->numerator % this->denominator == 0)
 		{
-			cout << whole << " (Proper)" << endl;
+			cout << whole << " (Improper)" << endl;
 		}
 		else
 		{

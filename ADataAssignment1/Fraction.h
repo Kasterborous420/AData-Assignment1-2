@@ -39,11 +39,11 @@ public:
 	friend istream & operator>> (istream& is, CFraction &other);
 
 	//CFraction convertToImproper(CFraction fraction);	//convert from Improper to Proper fraction
-	//CFraction convertToProper(CFraction fraction);		//convert from Proper to Improper fraction
+	//CFraction convertToProper(CFraction fraction);	//convert from Proper to Improper fraction
 
-	CFraction simplifyResult(CFraction fraction);		//Simplify Answer
+	void simplifyResult();								//Simplify Answer
 
-	void compare(CFraction f1, CFraction f2);			//Compare 2 fractions
+	void compare(CFraction other);						//Compare 2 fractions
 
 	int getLCM(CFraction other);						//Get Lowest Common Multiple
 	int getHCF(CFraction fraction);						//Get Highest Common Factor
