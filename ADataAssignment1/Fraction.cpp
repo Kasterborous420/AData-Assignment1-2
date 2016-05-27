@@ -134,18 +134,6 @@ istream & operator>> (istream &is, CFraction &f)
 	int wholenumber = 0;
 	bool isFraction = false;
 
-	/*std::getline(is, input, '-');
-
-	wholenumber = stoi(input, nullptr, 10);
-
-	std::getline(is, input, '/');
-
-	f.numerator = stoi(input, nullptr, 10);
-
-	std::getline(is, input);
-
-	f.denominator = stoi(input, nullptr, 10);*/
-
 
 	is >> input;
 
@@ -176,6 +164,21 @@ istream & operator>> (istream &is, CFraction &f)
 				f.numerator = stoi(n, nullptr, 10);
 
 				f.denominator = stoi(input, nullptr, 10);
+				try
+				{
+					if (f.denominator == 0) throw 0;
+				}
+				catch (int x)
+				{
+					if (x == 0)
+					{
+						int d;
+						cout << "Denominator CANNOT be ZERO!" << endl;
+						cout << "Input denominator: ";
+						std::cin >> d;
+						f.denominator = d;
+					}
+				}
 				
 				break;
 			}
